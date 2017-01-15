@@ -53,10 +53,10 @@ Route::any('page.about', Controller@method);
 // The child page "works" of "about".
 Route::any('page.about.works', Controller@method);
 
-// Ant child page of "about".
+// Any child page of "about".
 Route::any('page.about.*', Controller@method);
 
-// Ant descendant page of "about".
+// Any descendant page of "about".
 Route::any('page.about.**', Controller@method);
 
 // Grouping multiple routes that sharing a common `prefix`.
