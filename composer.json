@@ -6,14 +6,13 @@
     "type": "project",
     "require": {
         "php": ">=5.6.4",
-        "laraish/framework": "0.1.*"
+        "laraish/framework": "0.1.*",
+        "laravel/tinker": "~1.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~5.0",
-        "symfony/css-selector": "3.1.*",
-        "symfony/dom-crawler": "3.1.*"
+        "phpunit/phpunit": "~5.7"
     },
     "autoload": {
         "classmap": [
@@ -24,27 +23,31 @@
         }
     },
     "autoload-dev": {
-        "classmap": [
-            "tests/TestCase.php"
-        ]
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
     },
     "scripts": {
         "post-root-package-install": [
             "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
+            "Laraish\\Foundation\\ComposerScripts::renameHelperFunctions",
             "php artisan key:generate"
         ],
         "post-install-cmd": [
+            "Laraish\\Foundation\\ComposerScripts::renameHelperFunctions",
             "Illuminate\\Foundation\\ComposerScripts::postInstall",
             "php artisan optimize"
         ],
         "post-update-cmd": [
+            "Laraish\\Foundation\\ComposerScripts::renameHelperFunctions",
             "Illuminate\\Foundation\\ComposerScripts::postUpdate",
             "php artisan optimize"
         ]
     },
     "config": {
-        "preferred-install": "dist"
+        "preferred-install": "dist",
+        "sort-packages": true
     }
 }
