@@ -8,6 +8,6 @@ class NotFound extends Controller
 {
     public function index()
     {
-        return $this->view('errors.404');
+        return response($this->view('errors.404'), 404);
     }
 }
