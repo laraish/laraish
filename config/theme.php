@@ -168,13 +168,17 @@ return [
     'remove_version' => true,
 
     /*
-    |---------------------------------------------------------------------------
-    | remove admin columns of the plugin "Yoast SEO"
-    |---------------------------------------------------------------------------
+    |--------------------------------------------------------------------------
+    | Admin Page Assets
+    |--------------------------------------------------------------------------
     |
-    | remove_seo_admin_columns
+    | Enqueuing both scripts and styles to admin page.
     |
     */
 
-    'remove_seo_admin_columns' => true,
+    'admin_page_assets' => [
+        'scripts' => [],
+        'styles'  => [],
+        'hook'    => ''
+    ]
 ];
