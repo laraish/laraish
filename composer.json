@@ -44,6 +44,9 @@
             "Laraish\\Foundation\\ComposerScripts::renameHelperFunctions",
             "php artisan key:generate"
         ],
+        "post-update-cmd": [
+            "Laraish\\Foundation\\ComposerScripts::renameHelperFunctions"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover"
