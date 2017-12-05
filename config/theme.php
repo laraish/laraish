@@ -174,7 +174,7 @@ return [
     |
     | Register your page templates.
     | You can refer the template name by `$post->page_template`.
-    | Changes are that you are going to lookup `$post->page_template` in
+    | Chances are that you are going to lookup `$post->page_template` in
     | controllers to determine which view is going to be used.
     |
     */
