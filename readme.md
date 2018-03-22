@@ -242,7 +242,7 @@ You can get the pagination by calling the `getPagination` method of `Post`.
 ```php
 use App\Models\Post;
 
-$post = Post::queriedPosts();
+$posts = Post::queriedPosts();
 ```
 
 ```html
@@ -298,4 +298,4 @@ Being that said, this is not a Composer specific issue. I'd say it's a WordPress
 
 Here are some articles discussing this issue in WordPress.
 
-[A Narrative of Using Composer in a WordPress Plugin](https://wptavern.com/a-narrative-of-using-composer-in-a-wordpress-plugin)
+* [A Narrative of Using Composer in a WordPress Plugin](https://wptavern.com/a-narrative-of-using-composer-in-a-wordpress-plugin)
