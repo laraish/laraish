@@ -4,6 +4,9 @@ if (defined('ARTISAN_BINARY')) {
     return;
 }
 
+
+define('LARAVEL_START', microtime(true));
+
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader
@@ -16,7 +19,7 @@ if (defined('ARTISAN_BINARY')) {
 |
 */
 
-require __DIR__ . '/bootstrap/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
 
 /*
