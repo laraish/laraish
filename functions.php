@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Foundation\Http\Events\RequestHandled;
+
 if (defined('ARTISAN_BINARY')) {
     return;
 }
@@ -53,8 +55,8 @@ $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 
 $kernel->handle($request = Illuminate\Http\Request::capture());
 
-$app['events']->listen('kernel.handled', function ($request, $response) use ($kernel) {
-    $response->send();
+$app['events']->listen(RequestHandled::class, function (RequestHandled $event) use ($kernel) {
+    $event->response->send();
 
-    $kernel->terminate($request, $response);
+    $kernel->terminate($event->request, $event->response);
 });
