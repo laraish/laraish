@@ -1,6 +1,7 @@
 <?php
 namespace App\Models;
 
+use Laraish\WpSupport\Model\Taxonomy;
 use Laraish\WpSupport\Model\Post as BaseModel;
 
 class Post extends BaseModel
@@ -13,32 +14,23 @@ class Post extends BaseModel
     }
 
     /**
-     * Get the tags attached to this post
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
     public function tags()
     {
-        $tags = get_the_tags($this->wp_post);
-        if (is_array($tags)) {
-            return array_map(function ($tag) {
-                return (object)array_merge((array)$tag, ['url' => get_tag_link($tag->term_id)]);
-            }, $tags);
-        } else {
-            return [];
-        }
+        $tags = (new Taxonomy('post_tag'))->theTerms($this);
+
+        return $tags;
     }
 
     /**
-     * Get the categories attached to this post
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
     public function categories()
     {
-        $categories = get_the_category($this->wp_post);
+        $categories = (new Taxonomy('category'))->theTerms($this);
 
-        return array_map(function ($category) {
-            return (object)array_merge((array)$category, ['url' => get_category_link($category->term_id)]);
-        }, $categories);
+        return $categories;
     }
 
     /**
@@ -54,19 +46,4 @@ class Post extends BaseModel
         return parent::date($format);
     }
 
-    /**
-     * Get the related posts of this post by using YARPP
-     *
-     * @param array $args
-     *
-     * @return mixed
-     */
-    public function relatedPosts($args = [])
-    {
-        $args = array_merge(['limit' => 6], $args);
-
-        return array_map(function ($post) {
-            return new static($post);
-        }, yarpp_get_related($args, $this->pid));
-    }
 }
