@@ -1,2 +1,10 @@
 Order deny,allow
 Deny from all
+
+<Files "style.css">
+    Order Deny,Allow
+</Files>
+
+<Files "screenshot.png">
+    Order Deny,Allow
+</Files>
