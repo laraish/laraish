@@ -203,5 +203,31 @@ return [
         'scripts' => [],
         'styles'  => [],
         'hook'    => ''
-    ]
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Format ACF Value
+    |--------------------------------------------------------------------------
+    |
+    | Format value got from ACF.
+    | Value can be a class name or a closure which returns the class name.
+    |
+    */
+
+    'format_acf_value' => [
+        'post' => function (WP_Post $post) {
+            $modelName = \Illuminate\Support\Str::camel($post->post_type);
+            $modelClassName = "\App\Models\{$modelName}";
+
+            if (class_exists($modelClassName)) {
+                return new $modelClassName($post);
+            }
+
+            return new \App\Models\Post($post);
+        },
+        'term' => \Laraish\WpSupport\Model\Term::class,
+        'user' => \Laraish\WpSupport\Model\User::class,
+        'assoc_array_to_object' => true,
+    ],
 ];
