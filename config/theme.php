@@ -214,17 +214,17 @@ return [
     | Value can be a class name or a closure which returns the class name.
     |
     */
-
+    
     'format_acf_value' => [
         'post' => function (WP_Post $post) {
             $modelName = \ucfirst(\Illuminate\Support\Str::camel($post->post_type));
-            $modelClassName = "\App\Models\{$modelName}";
+            $modelClassName = "\\App\\Models\\$modelName";
 
             if (class_exists($modelClassName)) {
-                return new $modelClassName($post);
+                return $modelClassName;
             }
 
-            return new \App\Models\Post($post);
+            return \App\Models\Post::class;
         },
         'term' => \Laraish\WpSupport\Model\Term::class,
         'user' => \Laraish\WpSupport\Model\User::class,
