@@ -214,7 +214,7 @@ return [
     | Value can be a class name or a closure which returns the class name.
     |
     */
-    
+
     'format_acf_value' => [
         'post' => function (WP_Post $post) {
             $modelName = \ucfirst(\Illuminate\Support\Str::camel($post->post_type));

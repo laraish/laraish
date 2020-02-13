@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Generic;
 
+use App\Models\Page as PageModel;
 use App\Http\Controllers\Controller;
-use Laraish\WpSupport\Model\Post;
 
 class Page extends Controller
 {
@@ -12,17 +12,27 @@ class Page extends Controller
      */
     public function __construct()
     {
-        if ( ! empty($GLOBALS['post'])) {
+        if (!empty($GLOBALS['post'])) {
             setup_postdata($GLOBALS['post']);
         }
     }
 
     public function index()
     {
-        $data = [
-            'post' => new Post(),
-        ];
+        /** @var \WP_Post $post */
+        $post = get_queried_object();
+        $view = "page.{$post->post_name}";
+        $defaultView = 'generic.page';
 
-        return $this->view('generic.page', $data);
+        return $this->view(view()->exists($view) ? $view : $defaultView, $this->getViewData());
+    }
+
+    protected function getViewData(): array
+    {
+        $page = new PageModel();
+
+        return [
+            'page' => $page,
+        ];
     }
 }
