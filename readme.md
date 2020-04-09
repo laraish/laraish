@@ -254,6 +254,40 @@ $posts = Post::queriedPosts();
 By providing additional parameters, you can specify the view file and several options. See [laraish/pagination](https://github.com/laraish/pagination) for more details.
 
 
+## Work with ACF
+The model classes comes with Laraish works seamlessly with [ACF](https://www.advancedcustomfields.com/) out of the box.
+
+### Get the value of custom field from model
+For example, suppose that you have created a custom field with ACF named `foobar`. Then you can access the field's value like this: 
+
+```php
+use App\Models\Post;
+
+$post = new Post(123); 
+// As with the `Post` model, these models works the same way. 
+// `Laraish\WpSupport\Model\User`
+// `Laraish\WpSupport\Model\Term` 
+
+
+// This make it call the magic method to get the value of the custom field `foobar`. 
+$foobar = $post->foobar;
+```
+
+### Data Type Casting
+You can determine if or not or how to cast the data type retrieved from ACF at [`config/theme.php`](https://github.com/laraish/laraish/blob/master/config/theme.php#L218-L232).
+
+The default behavior is casting any of these types to Laraish's model:
+
+* `WP_Post` → `Laraish\WpSupport\Model\Post`
+* `WP_User` → `Laraish\WpSupport\Model\User`
+* `WP_Term` → `Laraish\WpSupport\Model\Term`
+
+Additionally, casting any assoc array to `stdClass`.
+
+## The `ShareViewData` Middleware
+Laraish comes with a middleware `app/Http/Middleware/ShareViewData.php`. This is your best place to define any [shared view data](https://laravel.com/docs/master/views#sharing-data-with-all-views) or [view composers](https://laravel.com/docs/master/views#view-composers). 
+
+
 ## Options page
 Perhaps creating options pages is one of the most tedious tasks. 
 If you've used the WordPress's API to create options pages, you know how dirty the code is going to be… 
@@ -288,6 +322,17 @@ As I mentioned in the [Installation](#installation) section. To run an artisan c
 * The MySQL server and the web server must be running.
 * If you are on Mac and use MAMP or similar application to create your local server environment you may need to change your `$PATH` environment variable to make Composer use the PHP binary that MAMP provides rather than the OS's built-in PHP binary.
 
+
+## Security Concerns
+Notice that Laraish is just a regular WordPress theme. Therefore, not only the `public` directory but all the files and directories inside the theme are **accessible** from outside.
+
+Laraish comes with two `.htaccess` files to deny any accesses against any files and directories inside the theme **except** the following files:
+
+* `style.css`
+* `screenshot.png`
+* `public/**`
+
+If you don't use Apache, you should have your server software configured to have the same access control just like the above one.
 
 # Known Issue
 If you have a plugin using Composer, and that plugin has the same dependency as your theme(Laraish) has, may lead to a problem when they are using a different version of that dependency.  In such a situation, it'll `require` multiple Composer Autoloaders(`vendor/autoload.php`), and **the last loaded one will take priority over the previous ones**.
