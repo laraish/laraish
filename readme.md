@@ -16,7 +16,7 @@ For those who are already familiar with Laravel, it should be a piece of cake fo
 
 **Laraish is not a framework for general purpose WordPress theme development.**
 
-Yes, it is a framework but not for general WordPress theme development. Laraish is aimed at helping create "homemade theme" rather than general purpose theme. So if you want to create themes with a bunch of theme options for sales or just for free distribution, you probably want to take a look at the following frameworks instead.
+Yes, it is a framework but not for general WordPress theme development. Laraish is aimed at helping create a _WordPress application_ rather than general purpose theme. So if you want to create themes with a bunch of theme options for sales or just for free distribution, you probably want to take a look at the following frameworks instead.
 
 * [Piklist](https://piklist.com/product/piklist/)
 * [Gantry](http://gantry.org/)
