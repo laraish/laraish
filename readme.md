@@ -4,7 +4,7 @@ Laravel is a web application framework with expressive, elegant syntax. It's one
 
 Laraish brings the Laravel Framework into WordPress, which allow us to have all the benefits of Laravel. So you can create themes with less effort, more enjoyment!
 
-# Table of contents
+## Table of contents
 
 - [Requirement](#requirement)
 - [What Laraish is and is not](#what-laraish-is-and-is-not)
