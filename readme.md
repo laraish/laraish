@@ -485,7 +485,7 @@ $foobar = $post->foobar;
 ```
 
 ### Data Type Casting
-You can determine if or not or how to cast the data type retrieved from ACF at [`config/theme.php`](https://github.com/laraish/laraish/blob/master/config/theme.php#L218-L232).
+You can determine if or not or how to cast the data type retrieved from ACF at [`config/theme.php`](https://github.com/laraish/laraish/blob/master/config/theme.php#L203-L217).
 
 The default behavior is casting any of these types to Laraish's model:
 
