@@ -13,10 +13,10 @@ Laraish brings the Laravel Framework into WordPress, which allow us to have all 
   - [Installation](#installation)
   - [Routing](#routing)
     - [Route order](#route-order)
-  - [Regular Route](#regular-route)
     - [Auto-Discovery Routing](#auto-discovery-routing)
       - [Use Auto-Discovery Routing in the route file.](#use-auto-discovery-routing-in-the-route-file)
       - [Use Auto-Discovery Routing in the Controller.](#use-auto-discovery-routing-in-the-controller)
+    - [Regular Route](#regular-route)
   - [Models](#models)
     - [Cast Model to JSON](#cast-model-to-json)
   - [The `@loop` blade directive](#the-loop-blade-directive)
@@ -157,23 +157,6 @@ The problem of this code is that the second route will never get matched.
 Because the first route matches to any pages, so all routes after the first one will be simply ignored.
 That is, routes that has a higher specificity should be placed above the routes that have a lower specificity.
 
-## Regular Route
-Alone with the WordPress routes, you can even write your own routes by URI, and it just works.
-Just be careful do not write regular routes to the `routes/wp.php` file ( technically you could, but I would not recommend ).
-For instance, write them to the `routes/web.php` file. 
-
-```php
-use Illuminate\Support\Facades\Route;
-
-// This will use the original UriValidator of Laravel.
-Route::get('/my/endpoint', function () {
-    return 'Magic!';
-});
-```
-
-Keep in mind that routes in `routes/wp.php` has the lowest priority of all the routes in the `routes` directory.
-
-
 ### Auto-Discovery Routing
 If you don't like to specify a route manually, you could always use the auto-discovery strategy instead.
 By turning on auto discovery routing, Laraish resolves the controller or view automatically the way similar to WordPress.
@@ -296,6 +279,21 @@ In the above example, if the coming request is for a page called "foo", it'll tr
 * `<ViewRootDir>/wp/page/foo.blade.php`.
 * `<ViewRootDir>/wp/page.blade.php`.
 
+### Regular Route
+Alone with the WordPress routes, you can even write your own routes by URI, and it just works.
+Just be careful do not write regular routes to the `routes/wp.php` file ( technically you could, but I would not recommend ).
+For instance, write them to the `routes/web.php` file. 
+
+```php
+use Illuminate\Support\Facades\Route;
+
+// This will use the original UriValidator of Laravel.
+Route::get('/my/endpoint', function () {
+    return 'Magic!';
+});
+```
+
+Keep in mind that routes in `routes/wp.php` has the lowest priority of all the routes in the `routes` directory.
 
 ## Models
 Laraish comes with some general purpose models like `Post` or `Term` model. Note that they are not an implementation of ORM like the Laravel's Eloquent Model. They are just a simple wrapper for WordPress's APIs that encapsulate some common logic to help you simplify your business logic. 
