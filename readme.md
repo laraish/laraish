@@ -4,6 +4,35 @@ Laravel is a web application framework with expressive, elegant syntax. It's one
 
 Laraish brings the Laravel Framework into WordPress, which allow us to have all the benefits of Laravel. So you can create themes with less effort, more enjoyment!
 
+# Table of contents
+
+- [Requirement](#requirement)
+- [What Laraish is and is not](#what-laraish-is-and-is-not)
+- [What's the difference between the original Laravel?](#whats-the-difference-between-the-original-laravel)
+- [Get Started](#get-started)
+  - [Installation](#installation)
+  - [Routing](#routing)
+    - [Route order](#route-order)
+  - [Regular Route](#regular-route)
+    - [Auto-Discovery Routing](#auto-discovery-routing)
+      - [Use Auto-Discovery Routing in the route file.](#use-auto-discovery-routing-in-the-route-file)
+      - [Use Auto-Discovery Routing in the Controller.](#use-auto-discovery-routing-in-the-controller)
+  - [Models](#models)
+    - [Cast Model to JSON](#cast-model-to-json)
+  - [The `@loop` blade directive](#the-loop-blade-directive)
+  - [Theme Options](#theme-options)
+  - [Actions and Filters](#actions-and-filters)
+  - [Pagination](#pagination)
+  - [Work with ACF](#work-with-acf)
+    - [Get the value of custom field from model](#get-the-value-of-custom-field-from-model)
+    - [Data Type Casting](#data-type-casting)
+  - [The `ShareViewData` Middleware](#the-shareviewdata-middleware)
+  - [Options page](#options-page)
+  - [View debugger](#view-debugger)
+  - [Run artisan command](#run-artisan-command)
+  - [Security Concerns](#security-concerns)
+- [Known Issue](#known-issue)
+  - [Composer race condition](#composer-race-condition)
 
 ## Requirement
 
@@ -23,7 +52,7 @@ Yes, it is a framework but not for general WordPress theme development. Laraish 
 * [Unyson](http://unyson.io/)
 
 
-## What's the diffrence between the original Laravel?
+## What's the difference between the original Laravel?
 
 I'd say almost no differences there, except some additional tweaking, which gets Laravel to work well inside a WordPress theme. So basically you could do anything that you could do with Laravel, it's just the regular Laravel inside a WordPress theme. If you are curious about what exactly have been modified, taking a diff to the original Laravel would make sense for you.
 
@@ -33,7 +62,10 @@ I'd say almost no differences there, except some additional tweaking, which gets
 ## Installation
 
 You can install Laraish by issuing the following command via [Composer](https://getcomposer.org/).
-`composer create-project --prefer-dist laraish/laraish <theme-name>`
+
+```shell script
+composer create-project --prefer-dist laraish/laraish <theme-name>
+```
 
 Note that **the MySQL server and the web server must be running before you can issue the `composer create-project` command** to install Laraish. Because after Composer finishes the installation, it's going to run an artisan command, which requires MySQL server and the web server that host the WordPress be running at the time you issuing the command.
 
@@ -219,7 +251,9 @@ If Laraish could resolve the route, it'll passes some default view data accordin
     * `$post` if it's a "frontpage", otherwise `$posts`
 
 Where `$post` is a Post [model](#models) object, and `$posts` is a `Laraish\Support\Wp\Query\QueryResults` object contains a collection of posts.
+
 By default, the post model will be `Laraish\Support\Wp\Model\Post`, but it'll try to locate a custom model in `\App\Models\Wp\Post` first.
+
 For example, if the queried object is a custom post type "movie", it will try to use `\App\Models\Wp\Post\Movie` if such a class found.
 Same rule applied to the taxonomy too, but the searching path will be `\App\Models\Wp\Taxonomy` instead.
 
@@ -320,7 +354,9 @@ In your view `wp.archive` :
 
 As you can see in the example above, you can get common properties of a post, like `$post->permalink` or `$post->title` etc. 
 
-Actually, those `properties` are not "real properties". When you access property like `$post->permalink`, under the hood, it'll call `$post->permalink()` to get the value for you automatically, and from the second time when you access the same property, it won't call `$post->permalink()` again, instead, it'll return the cached value from previous calling result. If you don't want to use cached value, you can call the method explicitly like `$post->title()`. Also, feel free to create your own "properties" by adding public methods to your model class.
+Actually, those `properties` are not "real properties". When you access property like `$post->permalink`, under the hood, it'll call `$post->permalink()` to get the value for you automatically, and from the second time when you access the same property, it won't call `$post->permalink()` again, instead, it'll return the cached value from previous calling result. If you don't want to use cached value, you can call the method explicitly like `$post->title()`.
+
+Also, feel free to create your own "properties" by adding public methods to your model class.
 
 Take a look at [Laraish\Support\Wp\Model](https://github.com/laraish/framework/tree/master/Support/Wp/Model), there are some predefined "properties" that you may want to use. 
 
