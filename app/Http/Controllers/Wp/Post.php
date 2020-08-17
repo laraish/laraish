@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Generic;
+namespace App\Http\Controllers\Wp;
 
 use App\Http\Controllers\Controller;
-use App\Models\Post;
 
-class Single extends Controller
+class Post extends Controller
 {
     /**
      * Single constructor.
@@ -19,10 +18,6 @@ class Single extends Controller
 
     public function index()
     {
-        $data = [
-            'post' => new Post(),
-        ];
-
-        return $this->view('generic.single', $data);
+        return $this->resolveView('wp.post');
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Wp\Post;
 
-use Laraish\WpSupport\Model\Post as BaseModel;
+use Laraish\Support\Wp\Model\Post as BaseModel;
 
 class Page extends BaseModel
 {

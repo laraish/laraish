@@ -42,92 +42,246 @@ Also, notice that if you are on Mac and use MAMP or similar application to creat
 ## Routing
 Laraish replaced the original `UriValidator`(`Illuminate\Routing\Matching\UriValidator`) with its own one to allow you to specify WordPress specific routes, like "archive" or "page" or "custom post type" ex.
 
-To define a WordPress specific route, just by providing a "page type" as the first argument.
+You define your **WordPress-specific-routes** in the `routes/wp.php` file.
 
 For example:
 
 ```php
-// The "about" page
-Route::any('page.about', Controller@method);
+use App\Http\Controllers\Wp\Home;
+use App\Http\Controllers\Wp\Page;
+use App\Http\Controllers\Wp\Post;
+use App\Http\Controllers\Wp\NotFound;
+use Laraish\Support\Facades\WpRoute;
 
-// The child page "works" of "about".
-Route::any('page.about.works', Controller@method);
+// Regular post pages
+WpRoute::post('post', [Post::class, 'index']);
 
-// Any child page of "about".
-Route::any('page.about.*', Controller@method);
+// Post pages where post-type is 'movie'
+WpRoute::post('movie', [Post::class, 'index']);
 
-// Any descendant page of "about".
-Route::any('page.about.**', Controller@method);
+// The archive page of "movie" post type.
+WpRoute::postArchive('movie', [Home::class, 'index']);
 
-// Grouping multiple routes that sharing a common `prefix`.
-Route::group(['prefix' => 'page'], function () {
-    
-    Route::any('about.contact', function () {
-        return 'Foo'; // equivalent to <page.about.contact>
-    });
-    
-    Route::any('service.*.price', function () {
-        return 'Bar'; // equivalent to <page.service.*.price>
-    });
-    
-});
+// The child page "works" of the "about" page.
+WpRoute::page('about.works', [Page::class, 'index']);
 
+// Any child pages of the "about" page.
+WpRoute::page('about.*', [Page::class, 'index']);
 
-// IMPORTANT !
-//
-// Routes that has a higher specificity should be 
-// placed more above(earlier) than the routes that have a lower specificity.
-// Why? If you place the routes that have a lower specificity,
-// the subsequent routes that have a higher specificity will be ignored.
-//
-// The following routes have a lower specificity than the above ones.
-// So you want to place them here.
+// Any descendant pages of the "about" page.
+WpRoute::page('about.**', [Page::class, 'index']);
 
-// Generic pages
-Route::any('page', Controller@method);
+// The "about" page ("about" is the slug of the page)
+WpRoute::page('about', [Page::class, 'index']);
 
-// Front page
-Route::any('front_page', Controller@method); 
+// The archive page of "foobar" term of "category" taxonomy.
+WpRoute::taxonomy('category.foobar', [Home::class, 'index']);
 
-// Post archive index page
-Route::any('archive', Controller@method);
+// The archive page of "category" taxonomy.
+WpRoute::taxonomy('category', [Home::class, 'index']);
 
+// The archive page of author "jack".
+WpRoute::author('jack', [Home::class, 'index']);
+
+// The archive page for all authors.
+WpRoute::author([Home::class, 'index']);
+
+// The search result page
+WpRoute::search([Home::class, 'index']);
+
+// All pages
+WpRoute::page([Page::class, 'index']);
+
+// The home/front page.
+WpRoute::home([Home::class, 'index']);
+
+// All archive pages.
+WpRoute::archive([Home::class, 'index']);
+
+// The 404 page.
+WpRoute::notFound([NotFound::class, 'index']);
 ```
 
-Here's some notes you should keep in mind.
+Here are some notes you should keep in mind.
 
 * You can use a "dot notation" to specify the hierarchy for pages and taxonomies.
 * You can use the wild card to specify any child/descendant page/term of a parent/ancestor page/term.
 * You should care about the order of your routes. Routes that has a higher specificity should be placed more above than the routes that have a lower specificity.
 
-What's more, you can even write your own routes by URI, and it just works.
+### Route order
+The position of the route is very **important**.
+
+Here is a bad example:
 
 ```php
+use App\Http\Controllers\Wp\Page;
+use Laraish\Support\Facades\WpRoute;
+
+WpRoute::page([Page::class, 'index']);
+WpRoute::page('works', [Page::class, 'works']);
+```
+
+The problem of this code is that the second route will never get matched.
+Because the first route matches to any pages, so all routes after the first one will be simply ignored.
+That is, routes that has a higher specificity should be placed above the routes that have a lower specificity.
+
+## Regular Route
+Alone with the WordPress routes, you can even write your own routes by URI, and it just works.
+Just be careful do not write regular routes to the `routes/wp.php` file ( technically you could, but I would not recommend ).
+For instance, write them to the `routes/web.php` file. 
+
+```php
+use Illuminate\Support\Facades\Route;
+
 // This will use the original UriValidator of Laravel.
 Route::get('/my/endpoint', function () {
     return 'Magic!';
 });
 ```
 
+Keep in mind that routes in `routes/wp.php` has the lowest priority of all the routes in the `routes` directory.
+
+
+### Auto-Discovery Routing
+If you don't like to specify a route manually, you could always use the auto-discovery strategy instead.
+By turning on auto discovery routing, Laraish resolves the controller or view automatically the way similar to WordPress.
+
+#### Use Auto-Discovery Routing in the route file.
+```php
+use App\Http\Controllers\Wp\Home;
+use App\Http\Controllers\Wp\Page;
+use Laraish\Support\Facades\WpRoute;
+
+WpRoute::home([Home::class, 'index']);
+WpRoute::page([Page::class, 'index']);
+
+// Fallback to auto discovery routing.
+WpRoute::autoDiscovery();
+```
+
+Notice that you should always place auto discovery routing in the last line of your route file.
+
+With this featured turned on, Laraish will try to find a controller or view that matches to the following naming convention.
+
+in the `<ViewRoot>/wp` directory:
+
+- home.blade.php
+- search.blade.php
+- archive.blade.php
+- post.blade.php
+- post
+    - {$post_type}.blade.php
+- post-archive
+    - {$post_type}.blade.php
+- page.blade.php
+- page
+    - {$page_slug}.blade.php
+    - {$page_slug}
+        - {$child_page}.blade.php
+        - …
+- template
+    - {$template_slug}.blade.php
+- taxonomy.blade.php
+- taxonomy
+    - {$taxonomy}.blade.php
+    - {$taxonomy}
+        - {$term}.blade.php
+        - {$term}
+            - {$child_term}.blade.php
+            - …
+- author.blade.php
+    - {$nicename}.blade.php
+
+Same rule applied to the controllers under the namespace `App\Http\Controllers\Wp`.
+
+For example, If the coming request is for a page called "foo", it'll try to : 
+
+1. Find a controller action in the following order.
+    * `App\Http\Controllers\Wp\Page\Foo@index`.
+    * `App\Http\Controllers\Wp\Page@index`.
+2. If no controller action found, try to find a view file in the following order (if any, pass the `$post` object as the view data).
+    * `<ViewRootDir>/wp/page/foo.blade.php`.
+    * `<ViewRootDir>/wp/page.blade.php`.
+
+As you can see, the searching paths will follow the hierarchy of the queried object.
+In the above example queried object is the page `foo`. Same rule will be applied to taxonomy or post archive Etc.
+
+If Laraish could resolve the route, it'll passes some default view data according to the type of queried object :
+
+* **page**
+    * `$post`
+* **post archive**
+    * `$posts`
+* **taxonomy archive**
+    * `$term`
+    * `$posts`
+* **home**
+    * `$post` if it's a "frontpage", otherwise `$posts`
+
+Where `$post` is a Post [model](#models) object, and `$posts` is a `Laraish\Support\Wp\Query\QueryResults` object contains a collection of posts.
+By default, the post model will be `Laraish\Support\Wp\Model\Post`, but it'll try to locate a custom model in `\App\Models\Wp\Post` first.
+For example, if the queried object is a custom post type "movie", it will try to use `\App\Models\Wp\Post\Movie` if such a class found.
+Same rule applied to the taxonomy too, but the searching path will be `\App\Models\Wp\Taxonomy` instead.
+
+#### Use Auto-Discovery Routing in the Controller.
+Not only in the route file, you could also use the `resolveView` method in the controller to let Laraish resolve the view file automatically.
+
+Here is an example shows how you can use utilize the `resolveView` in a controller.
+
+In the `routes/wp.php` file :
+
+```php
+use App\Http\Controllers\Wp\Page;
+use Laraish\Support\Facades\WpRoute;
+
+WpRoute::page([Page::class, 'index']);
+```
+
+In the controller :
+
+```php
+namespace App\Http\Controllers\Wp;
+
+use App\Http\Controllers\Controller;
+
+class Page extends Controller
+{
+    public function index()
+    {
+        $data = [ 'foo' => 'bar' ];
+        
+        // Let Laraish figure out the view file.
+        // 'wp.page' is the default view if no matched view found. 
+        return $this->resolveView('wp.page', $data);
+    }
+}
+```
+
+In the above example, if the coming request is for a page called "foo", it'll try to find a view file from the following paths:
+
+* `<ViewRootDir>/wp/page/foo.blade.php`.
+* `<ViewRootDir>/wp/page.blade.php`.
+
+
 ## Models
 Laraish comes with some general purpose models like `Post` or `Term` model. Note that they are not an implementation of ORM like the Laravel's Eloquent Model. They are just a simple wrapper for WordPress's APIs that encapsulate some common logic to help you simplify your business logic. 
 
-You can find those models in `Laraish\WpSupport\Model`. Because the `Post` model is the most frequently used model, for convenience, a `Post` Class that extends the `Laraish\WpSupport\Model\Post` has brought to your `app/Models` directory already.
+You can find those models in `Laraish\Support\Wp\Model`. Because the `Post` model is the most frequently used model, for convenience, a `Post` Class that extends the `Laraish\Support\Wp\Model\Post` has brought to your `app/Models` directory already.
 
 Let's take a look at an example. 
 
-See you have a route like this :
+Say you have a route like this :
 
 ```php
-Route::any('archive', 'Generic\Archive@index');
+WpRoute::archive('\App\Http\Controllers\Wp\Archive@index');
 ```
 
-In your controller `app\Http\Controllers\Generic\Archive` :
+In your controller `app\Http\Controllers\Wp\Archive` :
 
 ```php
 <?php
 
-namespace App\Http\Controllers\Generic;
+namespace App\Http\Controllers\Wp;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
@@ -140,14 +294,14 @@ class Archive extends Controller
             'posts' => Post::queriedPosts() // get the posts for current page
         ];
 
-        return $this->view('generic.archive', $data);
+        return $this->view('wp.archive', $data);
     }
 }
 ```
 
-In your view `generic.archive` :
+In your view `wp.archive` :
 
-```php
+```blade
 <main class="posts">
     @foreach($posts as $post)
         <section class="post">
@@ -168,15 +322,38 @@ As you can see in the example above, you can get common properties of a post, li
 
 Actually, those `properties` are not "real properties". When you access property like `$post->permalink`, under the hood, it'll call `$post->permalink()` to get the value for you automatically, and from the second time when you access the same property, it won't call `$post->permalink()` again, instead, it'll return the cached value from previous calling result. If you don't want to use cached value, you can call the method explicitly like `$post->title()`. Also, feel free to create your own "properties" by adding public methods to your model class.
 
-Take a look at [Laraish\WpSupport\Model](https://github.com/laraish/framework/tree/master/WpSupport/Model), there are some predefined "properties" that you may want to use. 
+Take a look at [Laraish\Support\Wp\Model](https://github.com/laraish/framework/tree/master/Support/Wp/Model), there are some predefined "properties" that you may want to use. 
 
+### Cast Model to JSON
+As I mentioned earlier, models that comes with Laraish are not real models.
+If you want to cast a "model" to JSON, you must specify the attributes you want output in the `$visible` property.
+
+For example:
+
+```php
+<?php
+namespace App\Models;
+
+use Laraish\Support\Wp\Model\Post as BaseModel;
+
+class Post extends BaseModel
+{
+    protected $visible = [
+        'title',
+        'thumbnail',
+        'content'
+    ];
+}
+```
+
+Now you can call `$post->toJson()` to get the serialized json string of the post object.
 
 ## The `@loop` blade directive
 Laraish also added a `@loop` blade directive for simplifying "[The Loop](https://codex.wordpress.org/The_Loop)" in WordPress.
 
 for example:
 
-```php
+```blade
 @loop($posts as $post)
 	{{ get_the_title() }}
 @endloop
@@ -265,8 +442,8 @@ use App\Models\Post;
 
 $post = new Post(123); 
 // As with the `Post` model, these models works the same way. 
-// `Laraish\WpSupport\Model\User`
-// `Laraish\WpSupport\Model\Term` 
+// `Laraish\Support\Wp\Model\User`
+// `Laraish\Support\Wp\Model\Term` 
 
 
 // This make it call the magic method to get the value of the custom field `foobar`. 
@@ -278,9 +455,9 @@ You can determine if or not or how to cast the data type retrieved from ACF at [
 
 The default behavior is casting any of these types to Laraish's model:
 
-* `WP_Post` → `Laraish\WpSupport\Model\Post`
-* `WP_User` → `Laraish\WpSupport\Model\User`
-* `WP_Term` → `Laraish\WpSupport\Model\Term`
+* `WP_Post` → `Laraish\Support\Wp\Model\Post`
+* `WP_User` → `Laraish\Support\Wp\Model\User`
+* `WP_Term` → `Laraish\Support\Wp\Model\Term`
 
 Additionally, casting any assoc array to `stdClass`.
 
@@ -334,8 +511,13 @@ Laraish comes with two `.htaccess` files to deny any accesses against any files 
 
 If you don't use Apache, you should have your server software configured to have the same access control just like the above one.
 
+
 # Known Issue
-If you have a plugin using Composer, and that plugin has the same dependency as your theme(Laraish) has, may lead to a problem when they are using a different version of that dependency.  In such a situation, it'll `require` multiple Composer Autoloaders(`vendor/autoload.php`), and **the last loaded one will take priority over the previous ones**.
+
+## Composer race condition
+If you have a plugin using Composer, and that plugin has the same dependency as your theme(Laraish) has, may lead to a problem when they are using a different version of that dependency.
+
+In such a situation, it'll `require` multiple Composer Autoloaders(`vendor/autoload.php`), and **the last loaded one will take priority over the previous ones**.
 
 Say you have a plugin that depends on the package `Foo (v1.2.0)`, and your theme depends on the same package `Foo (v2.0.1)`; such a situation may lead to load the unintended version of `Foo`. Which version will be used depend on the time the `autoloader.php` was loaded and the time the package(class) was used.
 
@@ -344,3 +526,6 @@ Being that said, this is not a Composer specific issue. I'd say it's a WordPress
 Here are some articles discussing this issue in WordPress.
 
 * [A Narrative of Using Composer in a WordPress Plugin](https://wptavern.com/a-narrative-of-using-composer-in-a-wordpress-plugin)
+* [PHP Scoper: How to Avoid Namespace Issues in your Composer Dependencies](https://deliciousbrains.com/php-scoper-namespace-composer-depencies/)
+
+If you are planing to publish this theme for general use, make sure you have your theme namespaced by using tools like [PHP Scoper](https://github.com/humbug/php-scoper).

@@ -59,21 +59,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Hint Text For Thumbnail
-    |--------------------------------------------------------------------------
-    |
-    | Set your hint text for thumbnails.
-    | For example : 'The default size of thumbnail is 300×200'
-    | the usual Laravel view path has already been registered for you.
-    |
-    */
-
-    'thumbnail_hint_text' => [
-        'post' => 'Image size：655 × 368'
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
     | Editor Styles
     |--------------------------------------------------------------------------
     |
@@ -154,7 +139,7 @@ return [
     |
     */
 
-    'excerpt_more' => '...',
+    //'excerpt_more' => '...',
 
     /*
     |--------------------------------------------------------------------------
@@ -182,7 +167,7 @@ return [
     //'page_templates' => [
     //    [
     //        'post_type' => ['page', 'post'],
-    //        'name'      => 'Template Name'
+    //        'name' => 'Template Name'
     //    ],
     //    [
     //        'post' => [$post_id, $post_object],
@@ -199,11 +184,11 @@ return [
     |
     */
 
-    'admin_page_assets' => [
-        'scripts' => [],
-        'styles'  => [],
-        'hook'    => ''
-    ],
+    //'admin_page_assets' => [
+    //    'scripts' => [],
+    //    'styles' => [],
+    //    'hook' => ''
+    //],
 
     /*
     |--------------------------------------------------------------------------
@@ -224,10 +209,10 @@ return [
                 return $modelClassName;
             }
 
-            return \App\Models\Post::class;
+            return \App\Models\Wp\Post\Post::class;
         },
-        'term' => \Laraish\WpSupport\Model\Term::class,
-        'user' => \Laraish\WpSupport\Model\User::class,
+        'term' => \Laraish\Support\Wp\Model\Term::class,
+        'user' => \Laraish\Support\Wp\Model\User::class,
         'assoc_array_to_object' => true,
     ],
 ];

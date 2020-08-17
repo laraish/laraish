@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Generic;
+namespace App\Http\Controllers\Wp;
 
 use App\Http\Controllers\Controller;
 
@@ -12,6 +12,6 @@ class Home extends Controller
             'version' => app()->version(),
         ];
 
-        return $this->view('generic.home', $data);
+        return $this->view('wp.home', $data);
     }
 }

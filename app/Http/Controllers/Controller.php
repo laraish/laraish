@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use Laraish\Foundation\Debugger\ViewDebugger;
 use Illuminate\Routing\Controller as BaseController;
+use Laraish\Routing\Traits\ViewDebugger;
+use Laraish\Routing\Traits\ViewResolver;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, ViewDebugger;
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, ViewDebugger, ViewResolver;
 }

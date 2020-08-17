@@ -30,7 +30,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // set the default middleware for wp routes.
+        static::$wpMiddleware = ['web'];
 
         parent::boot();
     }
