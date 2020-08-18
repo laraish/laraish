@@ -240,6 +240,8 @@ By default, the post model will be `Laraish\Support\Wp\Model\Post`, but it'll tr
 For example, if the queried object is a custom post type "movie", it will try to use `\App\Models\Wp\Post\Movie` if such a class found.
 Same rule applied to the taxonomy too, but the searching path will be `\App\Models\Wp\Taxonomy` instead.
 
+Notice that if you want to use template for pages or posts, you should register them in [theme.php](https://github.com/laraish/laraish/blob/master/config/theme.php#L167-L176).
+
 #### Use Auto-Discovery Routing in the Controller.
 Not only in the route file, you could also use the `resolveView` method in the controller to let Laraish resolve the view file automatically.
 
@@ -511,7 +513,8 @@ See [laraish/options](https://github.com/laraish/options) for more details.
 ## View debugger
 Sometimes, you just want to get some basic information about the current view(page) being displayed. For example, the path of the view file, or the name of the controller that was used.
 
-To get the basic information of the current view being displayed, you include the `ViewDebbuger` trait in your `App\Http\Controllers`. Open your console of your browser, and you could find something like this:
+To get the basic information of the current view being displayed, you include the `ViewDebbuger` trait in your `App\Http\Controllers`.
+Make sure you have called `wp_footer()` in your view, then open your console of your browser, and you could find something like this:
 
 ```json
 {
