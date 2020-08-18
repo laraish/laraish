@@ -203,7 +203,7 @@ return [
     'format_acf_value' => [
         'post' => function (WP_Post $post) {
             $modelName = \ucfirst(\Illuminate\Support\Str::camel($post->post_type));
-            $modelClassName = "\\App\\Models\\$modelName";
+            $modelClassName = "\\App\\Models\\Wp\\$modelName";
 
             if (class_exists($modelClassName)) {
                 return $modelClassName;
