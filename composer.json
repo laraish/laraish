@@ -6,7 +6,7 @@
     "type": "project",
     "require": {
         "php": "^7.3",
-        "laraish/framework": "^2.0.0",
+        "laraish/framework": "^2.1.0",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",

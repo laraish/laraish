@@ -24,16 +24,11 @@ return [
     |--------------------------------------------------------------------------
     | A series of array taking the form of:
     |
-    | name: string,
-    | slug: string,
-    | [ args: array ]
-    |
     */
 
     //'post_types' => [
-    //    [
-    //        'name' => 'post-type-name',
-    //        'slug' => 'post-type-slug',
+    //    'post_type' => [
+    //        'label' => 'Post Type Label'
     //    ],
     //],
 
@@ -43,17 +38,12 @@ return [
     |--------------------------------------------------------------------------
     | A series of array taking the form of:
     |
-    | name: string,
-    | slug: string,
-    | [ object_type: array|string ],
-    | [ args: array ]
-    |
     */
 
     //'taxonomies' => [
-    //    [
-    //        'name' => 'taxonomy-name',
-    //        'slug' => 'taxonomy-slug',
+    //    'taxonomy' => [
+    //        'label' => 'Taxonomy Label'
+    //        'object_type' => 'post'
     //    ],
     //],
 
