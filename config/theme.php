@@ -56,7 +56,8 @@ return [
     |
     */
 
-    //'editor_styles' => public_url('css/article-style.css'),
+    //'editor_styles' => 'public/css/article-style.css',
+
 
     /*
     |--------------------------------------------------------------------------
