@@ -22,8 +22,8 @@ define('LARAVEL_START', microtime(true));
 |
 */
 
-if (file_exists(__DIR__.'/../storage/framework/maintenance.php')) {
-    require __DIR__.'/../storage/framework/maintenance.php';
+if (file_exists(__DIR__ . '/../storage/framework/maintenance.php')) {
+    require __DIR__ . '/../storage/framework/maintenance.php';
 }
 
 /*
@@ -61,3 +61,15 @@ $app['events']->listen(RequestHandled::class, function (RequestHandled $event) u
 
     $kernel->terminate($event->request, $event->response);
 });
+
+function wp_laraish_menu()
+{
+    register_nav_menus(
+        array(
+            'primary-menu' => 'Primary Menu',
+            'sidebar-menu' => 'Sidebar Menu',
+            'footer-menu' => 'Footer Menu',
+        )
+    );
+}
+add_action('init', 'wp_laraish_menu');
