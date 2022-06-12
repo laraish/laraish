@@ -12,5 +12,7 @@ let mix = require('laravel-mix');
  */
 
 mix.options({processCssUrls: false})
-    .js('resources/js/app.js', 'public/js')
-    .sass('resources/sass/app.scss', 'public/css');
+    .js('resources/js/app.js', 'public/js').minify('public/js/app.js')
+    .js('resources/js/index.js', 'public/js').minify('public/js/index.js')
+    .js('resources/js/plugins.js', 'public/js').minify('public/js/plugins.js')
+    .sass('resources/sass/app.scss', 'public/css').minify('public/css/app.css');
