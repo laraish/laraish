@@ -7,16 +7,17 @@
         "prepare": "husky install"
     },
     "devDependencies": {
+        "@shufo/prettier-plugin-blade": "^1.13.4",
         "axios": "^1.6.2",
-        "laravel-vite-plugin": "^0.8.1",
-        "sass": "^1.69.5",
-        "vite": "^4.5.1",
         "husky": "^8.0.3",
+        "laravel-vite-plugin": "^0.8.1",
         "lint-staged": "^15.2.0",
         "prettier": "^3.1.0",
-        "prettier-plugin-css-order": "^2.0.1"
+        "prettier-plugin-css-order": "^2.0.1",
+        "sass": "^1.69.5",
+        "vite": "^4.5.1"
     },
     "lint-staged": {
-        "*.{js,ts,md,scss}": "prettier --write"
+        "*.{js,ts,md,scss,php}": "prettier --write"
     }
 }
