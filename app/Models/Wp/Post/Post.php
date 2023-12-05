@@ -1,6 +1,7 @@
 <?php
 namespace App\Models\Wp\Post;
 
+use Illuminate\Support\Collection;
 use Laraish\Support\Wp\Model\Taxonomy;
 use Laraish\Support\Wp\Model\Post as BaseModel;
 
@@ -13,20 +14,14 @@ class Post extends BaseModel
         //
     }
 
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    public function tags()
+    public function tags(): Collection
     {
         $tags = (new Taxonomy('post_tag'))->theTerms($this);
 
         return $tags;
     }
 
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    public function categories()
+    public function categories(): Collection
     {
         $categories = (new Taxonomy('category'))->theTerms($this);
 
@@ -35,12 +30,8 @@ class Post extends BaseModel
 
     /**
      * Change the date output format of parent's
-     *
-     * @param string $format
-     *
-     * @return mixed
      */
-    public function date($format = 'F jS, Y')
+    public function date(string|null $format = 'F jS, Y'): false|int|string
     {
         //December 24th, 2015
         return parent::date($format);

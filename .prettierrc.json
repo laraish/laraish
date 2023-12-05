@@ -1,0 +1,36 @@
+{
+    "singleQuote": true,
+    "overrides": [
+        {
+            "files": [
+                "resources/views/**/*.blade.php"
+            ],
+            "options": {
+                "tabWidth": 2,
+                "sortHtmlAttributes": "code-guide",
+                "parser": "blade"
+            }
+        },
+        {
+            "files": [
+                "app/**/*.php",
+                "config/**/*.php",
+                "routes/**/*.php"
+            ],
+            "options": {
+                "tabWidth": 2,
+                "parser": "php"
+            }
+        },
+        {
+            "files": [
+                "resources/sass/**/*.scss"
+            ],
+            "options": {
+                "tabWidth": 2,
+                "printWidth": 120
+            }
+        }
+
+    ]
+}

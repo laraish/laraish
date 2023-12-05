@@ -8,10 +8,8 @@ class AppServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         // Change the error reporting level to match WordPress's
         if ( ! WP_DEBUG) {
@@ -21,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
         $this->shareViewData();
     }
 
-    public function shareViewData()
+    public function shareViewData(): void
     {
         add_filter('template_include', function ($template) {
 
@@ -37,10 +35,8 @@ class AppServiceProvider extends ServiceProvider
 
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         //
     }

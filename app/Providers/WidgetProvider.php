@@ -8,19 +8,19 @@ class WidgetProvider extends ServiceProvider
 {
     /**
      * Array of Class names that will be passed to `register_widget()`
-     * @type array
+     * @var array<class-string>
      */
     protected $widgets = [];
 
     /**
      * Array of arguments(array) passed to `register_sidebar()`
      * Usually you should give something like [ 'name' => 'Nice Sidebar', 'id' => 'nice_sidebar']
-     * @type array
+     * @var array<string, string>
      */
     protected $widgetAreas = [];
 
 
-    public function boot()
+    public function boot(): void
     {
         //
 
