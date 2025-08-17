@@ -1,21 +1,24 @@
 {
+    "$schema": "https://json.schemastore.org/package.json",
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "vite",
         "build": "vite build",
-        "prepare": "husky install"
+        "dev": "vite",
+        "prepare": "husky"
     },
     "devDependencies": {
-        "@shufo/prettier-plugin-blade": "^1.13.4",
-        "axios": "^1.6.2",
-        "husky": "^8.0.3",
-        "laravel-vite-plugin": "^0.8.1",
-        "lint-staged": "^15.2.0",
-        "prettier": "^3.1.0",
-        "prettier-plugin-css-order": "^2.0.1",
-        "sass": "^1.69.5",
-        "vite": "^4.5.1"
+        "@shufo/prettier-plugin-blade": "^1.16.1",
+        "@tailwindcss/vite": "^4.0.0",
+        "axios": "^1.11.0",
+        "concurrently": "^9.0.1",
+        "husky": "^9.1.7",
+        "laravel-vite-plugin": "^2.0.0",
+        "lint-staged": "^16.1.5",
+        "prettier": "^3.6.2",
+        "prettier-plugin-css-order": "^2.1.2",
+        "tailwindcss": "^4.0.0",
+        "vite": "^7.0.4"
     },
     "lint-staged": {
         "*.{js,ts,md,scss,php}": "prettier --write"
