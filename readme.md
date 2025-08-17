@@ -2,7 +2,7 @@
 
 Laravel is a web application framework with expressive, elegant syntax. It's one of the most popular PHP frameworks today.
 
-Laraish brings the Laravel Framework into WordPress, which allow us to have all the benefits of Laravel. So you can create themes with less effort, more enjoyment!
+Laraish brings the Laravel Framework into WordPress, which allows us to have all the benefits of Laravel. So you can create themes with less effort and more enjoyment!
 
 ## Table of contents
 
@@ -248,13 +248,13 @@ By default, the post model will be `Laraish\Support\Wp\Model\Post`, but it'll tr
 For example, if the queried object is a custom post type "movie", it will try to use `\App\Models\Wp\Post\Movie` if such a class found.
 Same rule applied to the taxonomy too, but the searching path will be `\App\Models\Wp\Taxonomy` instead.
 
-Notice that if you want to use template for pages or posts, you should register them in [theme.php](https://github.com/laraish/laraish/blob/master/config/theme.php#L167-L176).
+Notice that if you want to use templates for pages or posts, you should register them in [theme.php](https://github.com/laraish/laraish/blob/master/config/theme.php#L167-L176).
 
 #### Use Auto-Discovery Routing in the Controller.
 
 Not only in the route file, you could also use the `resolveView` method in the controller to let Laraish resolve the view file automatically.
 
-Here is an example shows how you can use utilize the `resolveView` in a controller.
+Here is an example that shows how you can utilize the `resolveView` in a controller.
 
 In the `routes/wp.php` file :
 
@@ -292,7 +292,7 @@ In the above example, if the coming request is for a page called "foo", it'll tr
 
 ### Regular Route
 
-Alone with the WordPress routes, you can even write your own routes by URI, and it just works.
+Along with the WordPress routes, you can even write your own routes by URI, and it just works.
 Just be careful do not write regular routes to the `routes/wp.php` file ( technically you could, but I would not recommend ).
 For instance, write them to the `routes/web.php` file.
 
@@ -373,7 +373,7 @@ Take a look at [Laraish\Support\Wp\Model](https://github.com/laraish/framework/t
 
 ### Cast Model to JSON
 
-As I mentioned earlier, models that comes with Laraish are not real models.
+As I mentioned earlier, models that come with Laraish are not real models.
 If you want to cast a "model" to JSON, you must specify the attributes you want output in the `$visible` property.
 
 For example:
@@ -420,15 +420,15 @@ will be compiled to
 
 where `$post` should be a `Post` model object.
 
-Usually you don't want to use the `@loop` directive. Because it'll introduce some unnecessary overheads. Keep in mind that always prefer `@foreach` to `@loop`. Except you want to access some properties like `content` or `excerpt` which requiring must be retrieved within "The Loop", otherwise never use the `@loop` actively.
+Usually you don't want to use the `@loop` directive because it'll introduce some unnecessary overhead. Keep in mind that you should always prefer `@foreach` to `@loop`. Unless you want to access some properties like `content` or `excerpt` which must be retrieved within "The Loop", otherwise never use the `@loop` actively.
 
 ## Theme Options
 
-Setup the custom post type, register the navigation menus ... There always are some common tasks you have to deal with when you start to build a WordPress theme. The `app/config/theme.php` is where you define all your common tasks.
+Set up the custom post type, register the navigation menus... There are always some common tasks you have to deal with when you start to build a WordPress theme. The `app/config/theme.php` is where you define all your common tasks.
 
 Some basic options are predefined for you. Take a look at the [config/theme.php](https://github.com/laraish/laraish/blob/master/config/theme.php).
 
-Also, you can create your own options by adding new static methods to the `App\Providers\ThemeOptionsProvider`. The name of the method will become to an option.
+Also, you can create your own options by adding new static methods to the `App\Providers\ThemeOptionsProvider`. The name of the method will become an option.
 
 ## Actions and Filters
 
@@ -479,7 +479,7 @@ By providing additional parameters, you can specify the view file and several op
 
 ## Work with ACF
 
-The model classes comes with Laraish works seamlessly with [ACF](https://www.advancedcustomfields.com/) out of the box.
+The model classes that come with Laraish work seamlessly with [ACF](https://www.advancedcustomfields.com/) out of the box.
 
 ### Get the value of custom field from model
 
@@ -494,7 +494,7 @@ $post = new Post(123);
 // `Laraish\Support\Wp\Model\Term`
 
 
-// This make it call the magic method to get the value of the custom field `foobar`.
+// This makes it call the magic method to get the value of the custom field `foobar`.
 $foobar = $post->foobar;
 ```
 
@@ -572,11 +572,11 @@ In such a situation, it'll `require` multiple Composer Autoloaders(`vendor/autol
 
 Say you have a plugin that depends on the package `Foo (v1.2.0)`, and your theme depends on the same package `Foo (v2.0.1)`; such a situation may lead to load the unintended version of `Foo`. Which version will be used depend on the time the `autoloader.php` was loaded and the time the package(class) was used.
 
-Being that said, this is not a Composer specific issue. I'd say it's a WordPress issue that needs to be solved somehow.
+That being said, this is not a Composer-specific issue. I'd say it's a WordPress issue that needs to be solved somehow.
 
 Here are some articles discussing this issue in WordPress.
 
 -   [A Narrative of Using Composer in a WordPress Plugin](https://wptavern.com/a-narrative-of-using-composer-in-a-wordpress-plugin)
 -   [PHP Scoper: How to Avoid Namespace Issues in your Composer Dependencies](https://deliciousbrains.com/php-scoper-namespace-composer-depencies/)
 
-If you are planing to publish this theme for general use, make sure you have your theme namespaced by using tools like [PHP Scoper](https://github.com/humbug/php-scoper).
+If you are planning to publish this theme for general use, make sure you have your theme namespaced by using tools like [PHP Scoper](https://github.com/humbug/php-scoper).
