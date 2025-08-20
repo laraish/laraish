@@ -4,7 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Foundation\Http\Events\RequestHandled;
 
-if (defined('ARTISAN_BINARY')) {
+// CLI環境（Artisan実行時）では実行しない
+if (PHP_SAPI === 'cli') {
     return;
 }
 
@@ -52,12 +53,14 @@ require __DIR__ . '/vendor/autoload.php';
 
 $app = require_once __DIR__ . '/bootstrap/app.php';
 
-$kernel = $app->make(Kernel::class);
+// Laravel 11/12: handleRequestメソッドを使用
+// template_includeフィルター内でKernel->handle()を実行し、RequestHandledイベントでレスポンス送信
+$app->handleRequest(Request::capture());
 
-$kernel->handle(Request::capture());
-
-$app['events']->listen(RequestHandled::class, function (RequestHandled $event) use ($kernel) {
+// RequestHandledイベントでレスポンス送信とterminate処理
+$app['events']->listen(RequestHandled::class, function (RequestHandled $event) use ($app) {
     $event->response->send();
 
+    $kernel = $app->make(Kernel::class);
     $kernel->terminate($event->request, $event->response);
 });

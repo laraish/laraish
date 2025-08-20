@@ -11,7 +11,7 @@
     <link rel="apple-touch-icon-precomposed" href="{{ asset('images/apple-touch-icon-precomposed.png') }}">
     <link rel="stylesheet" href="{{ get_stylesheet_uri() }}">
 
-    @vite(['resources/scss/app.scss'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @yield('head')
     <?php wp_head();?>
 </head>

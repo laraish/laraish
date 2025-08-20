@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Providers;
+namespace App\WpProviders;
 
 use Laraish\Support\Wp\Providers\ThemeOptionsProvider as ServiceProvider;
 

@@ -1,35 +1,14 @@
-// Fonts
-@import url(https://fonts.googleapis.com/css?family=Raleway:100,300,400,600);
+@import 'tailwindcss';
 
-// reset
-* {
-    box-sizing: border-box;
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    margin-top: 0;
-    margin-bottom: 0.2em;
-    line-height: 1;
-    font-weight: inherit;
-}
-
-// root
-html,
-body {
-    background-color: #fff;
-    color: #636b6f;
-    font-family: 'Raleway', serif;
-    font-weight: 300;
-    height: 100vh;
-    margin: 0;
-}
-
-// generic class
+/* generic class */
 .site {
     width: 960px;
     max-width: 100%;
@@ -84,7 +63,7 @@ body {
     text-align: center;
 }
 
-// Page style
+/* Page style */
 .article__header {
     margin-bottom: 3em;
 }

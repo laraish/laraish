@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Providers;
+namespace App\WpProviders;
 
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Laraish\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use App\Listeners\MainQueryListener;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -24,7 +25,7 @@ class EventServiceProvider extends ServiceProvider
      * @var array<string, class-string>
      */
     protected $action = [
-        'pre_get_posts' => 'App\Listeners\MainQueryListener'
+        'pre_get_posts' => MainQueryListener::class
     ];
 
     /**
