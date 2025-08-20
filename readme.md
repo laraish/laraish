@@ -21,7 +21,8 @@ Laraish brings the Laravel Framework into WordPress, which allows us to have all
         -   [Cast Model to JSON](#cast-model-to-json)
     -   [The `@loop` blade directive](#the-loop-blade-directive)
     -   [Theme Options](#theme-options)
-    -   [Actions and Filters](#actions-and-filters)
+    -   [WordPress Hooks](#wordpress-hooks)
+        -   [WordPress Hook Auto-Discovery System](#wordpress-hook-auto-discovery-system)
     -   [Pagination](#pagination)
     -   [Work with ACF](#work-with-acf)
         -   [Get the value of custom field from model](#get-the-value-of-custom-field-from-model)
@@ -53,6 +54,8 @@ Yes, it is a framework but not for general WordPress theme development. Laraish 
 ## What's the difference between the original Laravel?
 
 I'd say almost no differences there, except some additional tweaking, which gets Laravel to work well inside a WordPress theme. So basically you could do anything that you could do with Laravel, it's just the regular Laravel inside a WordPress theme. If you are curious about what exactly have been modified, taking a diff to the original Laravel would make sense for you.
+
+**Note**: The current version of Laraish is built on **Laravel 12**, providing you with all the latest features, security updates, and performance improvements from the Laravel framework.
 
 # Get Started
 
@@ -430,36 +433,90 @@ Some basic options are predefined for you. Take a look at the [config/theme.php]
 
 Also, you can create your own options by adding new static methods to the `App\Providers\ThemeOptionsProvider`. The name of the method will become an option.
 
-## Actions and Filters
+## WordPress Hooks
 
-You define your actions and filters in `App\Providers\EventServiceProvider` just like the laravel's event.
+### WordPress Hook Auto-Discovery System
 
-The following example adding a `pre_get_posts` action, and the `handle` method of `App\Listeners\MainQueryListener` will be called for this action.
+Laraish provides an Auto-Discovery System that automatically scans the `app/WpListeners` directory and registers WordPress hooks based on class properties. This approach is similar to Laravel's EventServiceProvider but requires no manual configuration.
+
+#### Creating Hook Listeners
+
+Create classes that extend `WpHookListener` in the `app/WpListeners` directory:
 
 ```php
 <?php
 
-namespace App\Providers;
+namespace App\WpListeners;
 
-use Laraish\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Laraish\Foundation\WpHook\WpHookType;
+use Laraish\Foundation\WpHook\WpHookListener;
 
-class EventServiceProvider extends ServiceProvider
+class MainQueryListener extends WpHookListener
 {
-    /**
-     * Register the WordPress actions
-     * @var array
-     */
-    protected $action = [
-            'pre_get_posts' => 'App\Listeners\MainQueryListener'
-    ];
+    protected string $hookName = 'pre_get_posts';
+    protected WpHookType $hookType = WpHookType::ACTION;
+    protected int $priority = 10;
+    protected int $argumentsNumber = 1;
 
-    /**
-     * Register the WordPress filters
-     * @var array
-     */
-    protected $filter = [];
+    public function handle(\WP_Query $query)
+    {
+        if (is_admin() || ! $query->is_main_query()) {
+            return;
+        }
+
+        if ($query->is_home()) {
+            // Modify the main query for home page
+            $query->set('posts_per_page', 10);
+        }
+    }
 }
 ```
+
+#### Hook Configuration Properties
+
+- `$hookName` - The WordPress hook name (e.g., 'init', 'pre_get_posts')
+- `$hookType` - Either `WpHookType::ACTION` or `WpHookType::FILTER`
+- `$priority` - Hook priority (default: 10)
+- `$argumentsNumber` - Number of arguments the hook receives (default: 1)
+
+#### Filter Example
+
+```php
+<?php
+
+namespace App\WpListeners;
+
+use Laraish\Foundation\WpHook\WpHookType;
+use Laraish\Foundation\WpHook\WpHookListener;
+
+class CustomTitleFilter extends WpHookListener
+{
+    protected string $hookName = 'the_title';
+    protected WpHookType $hookType = WpHookType::FILTER;
+    protected int $priority = 10;
+    protected int $argumentsNumber = 2;
+
+    public function handle($title, $id = null)
+    {
+        // Modify the title
+        return "Custom: " . $title;
+    }
+}
+```
+
+#### Directory Structure
+
+Place your hook listeners in the `app/WpListeners` directory:
+
+```
+app/
+└── WpListeners/
+    ├── MainQueryListener.php
+    ├── CustomTitleFilter.php
+    └── InitHooksListener.php
+```
+
+The Auto-Discovery System will automatically find and register all properly configured listeners during application bootstrap.
 
 ## Pagination
 
